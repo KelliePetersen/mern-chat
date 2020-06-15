@@ -12,12 +12,12 @@ io.on('connection', socket => {
   socket.on('join', ({ name, room }, cb) => {
     const { error, user } = addUser({ id: socket.id, name, room });
     if (error) return cb(error);
-    socket.emit('message', { user: 'admin', text: `Welcome to ${user.room}, ${user.name}.`});
-    socket.broadcast.to(user.room).emit('message', { 
+    socket.emit('message', { user: 'admin', text: `Welcome to ${room}, ${name}.`});
+    socket.broadcast.to(room).emit('message', { 
       user: 'admin', 
-      text: `${user.name} has joined ${user.room}. Welcome ${user.name}.`
+      text: `${name} has joined ${room}. Welcome ${name}.`
     })
-    socket.join(user.room);
+    socket.join(room);
   })
 
   socket.on('sendMessage', (message, cb) => {
