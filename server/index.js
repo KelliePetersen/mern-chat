@@ -10,7 +10,14 @@ const PORT = process.env.PORT || 5000;
 
 io.on('connection', socket => {
   socket.on('join', ({ name, room }, cb) => {
-    console.log('connected');
+    const { error, user } = addUser({ id: socket.id, name, room });
+    if (error) return cb(error);
+    socket.emit('message', { user: 'admin', text: `Welcome to ${user.room}, ${user.name}.`});
+    socket.broadcast.to(user.room).emit('message', { 
+      user: 'admin', 
+      text: `${user.name} has joined ${user.room}. Welcome ${user.name}.`
+    })
+    socket.join(user.room);
   })
   socket.on('disconnect', () => {
     console.log('disconnected');
