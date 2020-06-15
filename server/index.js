@@ -9,7 +9,9 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 io.on('connection', socket => {
-  console.log('connected');
+  socket.on('join', ({ name, room }, cb) => {
+    console.log('connected');
+  })
   socket.on('disconnect', () => {
     console.log('disconnected');
   })
